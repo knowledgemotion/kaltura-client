@@ -1,6 +1,7 @@
 package com.boclips.kalturaclient.http;
 
 import lombok.Getter;
+import org.apache.http.NameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +20,20 @@ public class RequestFilters {
     }
 
     public Map<String, Object> toMap() {
-        return filters.stream().collect(Collectors.toMap(RequestFilter::getKey, RequestFilter::getValue));
+        return filters.stream().collect(Collectors.toMap(RequestFilter::getName, RequestFilter::getValue));
+    }
+
+    public List<NameValuePair> toPairs() {
+        return new ArrayList<>(filters);
     }
 
     @Getter
-    private class RequestFilter {
-        private String key;
+    private class RequestFilter implements NameValuePair {
+        private String name;
         private String value;
 
         RequestFilter(String key, String value) {
-            this.key = key;
+            this.name = key;
             this.value = value;
         }
     }
