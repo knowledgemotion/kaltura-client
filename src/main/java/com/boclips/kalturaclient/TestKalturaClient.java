@@ -8,7 +8,6 @@ import com.boclips.kalturaclient.media.links.LinkBuilder;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 
 import static java.util.stream.Collectors.toMap;
@@ -31,7 +30,7 @@ public class TestKalturaClient implements KalturaClient {
                         .partnerId("partner-id")
                         .userId("user-id")
                         .secret("ssh-it-is-a-secret")
-                        .streamFlavorParamIds("1,2,3,4")
+                        .streamFlavorParamIds(Arrays.asList(new Flavor(Quality.HIGH, "2"), new Flavor(Quality.LOW, "1")))
                         .build()
         );
     }
@@ -91,7 +90,7 @@ public class TestKalturaClient implements KalturaClient {
                 .status(status)
                 .playCount(0)
                 .tags(Collections.emptyList())
-                .flavorParamsIds(Arrays.asList("1","2","3","4"))
+                .flavorParamsIds(Arrays.asList("1", "2", "3", "4"))
                 .createdAt(LocalDateTime.now())
                 .conversionProfileId(1234560)
                 .build()

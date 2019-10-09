@@ -1,8 +1,11 @@
 package com.boclips.kalturaclient.media.links;
 
+import com.boclips.kalturaclient.Flavor;
 import com.boclips.kalturaclient.KalturaClientConfig;
 import com.boclips.kalturaclient.media.streams.StreamFormat;
 import com.damnhandy.uri.template.UriTemplate;
+
+import static java.util.stream.Collectors.toList;
 
 public class LinkBuilder {
     private final KalturaClientConfig config;
@@ -31,7 +34,7 @@ public class LinkBuilder {
                 .set("partnerId", config.getPartnerId())
                 .set("entryId", entryId)
                 .set("format", streamingTechnique.getCode())
-                .set("flavorParamIds", config.getStreamFlavorParamIds())
+                .set("flavorParamIds", config.getStreamFlavorParamIds().stream().map(Flavor::getId).collect(toList()))
                 .expand();
     }
 

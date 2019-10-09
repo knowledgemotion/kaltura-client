@@ -259,7 +259,7 @@ class KalturaClientContractTest extends Specification {
     }
 
     private KalturaClient realClient() {
-        Map<String, String> configuration = readConfiguration()
+        Map<String, Object> configuration = readConfiguration()
         KalturaClientConfig config = KalturaClientConfig.builder()
                 .partnerId(configuration.get("PARTNER_ID"))
                 .userId(configuration.get("USER_ID"))
@@ -270,8 +270,8 @@ class KalturaClientContractTest extends Specification {
         return KalturaClient.create(config)
     }
 
-    private Map<String, String> readConfiguration() {
-        Map<String, String> configuration = new HashMap<>()
+    private Map<String, Object> readConfiguration() {
+        Map<String, Object> configuration = new HashMap<>()
 
         Yaml yaml = new Yaml()
         InputStream inputStream = this.getClass()

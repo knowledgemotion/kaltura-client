@@ -2,7 +2,9 @@ package com.boclips.kalturaclient.session
 
 import au.com.dius.pact.consumer.PactVerificationResult
 import au.com.dius.pact.consumer.groovy.PactBuilder
+import com.boclips.kalturaclient.Flavor
 import com.boclips.kalturaclient.KalturaClientConfig
+import com.boclips.kalturaclient.Quality
 import spock.lang.Specification
 
 class RestSessionRetrieverTest extends Specification {
@@ -17,7 +19,12 @@ class RestSessionRetrieverTest extends Specification {
                         .secret("123")
                         .partnerId("abc")
                         .sessionTtl(8675309)
-                        .streamFlavorParamIds("1,2,3,4")
+                        .streamFlavorParamIds(
+                                Arrays.asList(
+                                        new Flavor(Quality.LOW, "1"),
+                                        new Flavor(Quality.MEDIUM, "2"),
+                                        new Flavor(Quality.HIGH, "3"),
+                                ))
                         .build()
         )
 
@@ -39,17 +46,19 @@ class RestSessionRetrieverTest extends Specification {
             hasPactWith "KalturaApi"
             port PORT
             uponReceiving("POST session start")
-            withAttributes([
-                    method : 'POST',
-                    path   : '/api_v3/service/session/action/start',
-                    headers: ['Content-Type': 'application/x-www-form-urlencoded'],
-                    body   : 'expiry=8675309&format=1&partnerId=abc&secret=123&type=2&userId=user%40kaltura.com'
-            ])
-            willRespondWith([
-                    status : 200,
-                    headers: ['Content-Type': 'application/json;charset=UTF-8'],
-                    body   : '"aSession"'
-            ])
+            withAttributes(
+                    [
+                            method : 'POST',
+                            path   : '/api_v3/service/session/action/start',
+                            headers: ['Content-Type': 'application/x-www-form-urlencoded'],
+                            body   : 'expiry=8675309&format=1&partnerId=abc&secret=123&type=2&userId=user%40kaltura.com'
+                    ])
+            willRespondWith(
+                    [
+                            status : 200,
+                            headers: ['Content-Type': 'application/json;charset=UTF-8'],
+                            body   : '"aSession"'
+                    ])
         } as PactBuilder
     }
 

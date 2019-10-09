@@ -1,10 +1,10 @@
 package com.boclips.kalturaclient.media.links
 
+import com.boclips.kalturaclient.Flavor
 import com.boclips.kalturaclient.KalturaClientConfig
+import com.boclips.kalturaclient.Quality
 import com.boclips.kalturaclient.media.streams.StreamFormat
 import spock.lang.Specification
-
-import java.nio.charset.StandardCharsets
 
 class LinkBuilderTest extends Specification {
 
@@ -16,7 +16,11 @@ class LinkBuilderTest extends Specification {
                 .partnerId("partner1")
                 .userId("user")
                 .secret("secret")
-                .streamFlavorParamIds('1111,2222,3333')
+                .streamFlavorParamIds(Arrays.asList(
+                        new Flavor(Quality.LOW, "1"),
+                        new Flavor(Quality.MEDIUM, "2"),
+                        new Flavor(Quality.HIGH, "3"),
+                ))
                 .build()
         linkBuilder = new LinkBuilder(config)
     }
@@ -57,6 +61,6 @@ class LinkBuilderTest extends Specification {
         then:
         hlsStream.contains("entryId/media-entry-id")
         hlsStream.contains("format/" + streamTechnique.code)
-        hlsStream.contains("flavorParamIds/" + URLEncoder.encode(config.getStreamFlavorParamIds(), StandardCharsets.UTF_8.toString()))
+        hlsStream.contains("flavorParamIds/1,2,3")
     }
 }
